@@ -1,22 +1,22 @@
-abstract class todoStates{}
+abstract class TodoStates{}
 
-class todoInitialState extends todoStates{}
+class TodoInitialState extends TodoStates{}
 
-class todoInitialBottomNavBar extends todoStates{}
+class TodoInitialBottomNavBar extends TodoStates{}
 
-class todoChangeBottomNavBar extends todoStates{}
+class TodoChangeBottomNavBar extends TodoStates{}
 
-class todoChangeIconBottomNavBar extends todoStates{}
+class TodoChangeIconBottomNavBar extends TodoStates{}
 
-class todoCreateDataBase extends todoStates{}
+class TodoCreateDataBase extends TodoStates{}
 
-class todoGetDataBase extends todoStates{}
+class TodoGetDataBase extends TodoStates{}
 
-class todoInsertToDataBase extends todoStates{}
+class TodoInsertToDataBase extends TodoStates{}
 
-class todoUpdateToDataBase extends todoStates{}
+class TodoUpdateToDataBase extends TodoStates{}
 
-class todoDeleteDataBase extends todoStates{}
+class TodoDeleteDataBase extends TodoStates{}
 
-class todoDataBaseLoadingState extends todoStates{}
+class TodoDataBaseLoadingState extends TodoStates{}
 

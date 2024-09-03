@@ -7,14 +7,14 @@ import '../../todo_pages/archive_task_page.dart';
 import '../../todo_pages/done_task_page.dart';
 import '../../todo_pages/new_task_page.dart';
 
-class todoCubit extends Cubit<todoStates>{
-  todoCubit():super(todoInitialState());
-  static todoCubit get(context)=>BlocProvider.of(context);
+class TodoCubit extends Cubit<TodoStates>{
+  TodoCubit():super(TodoInitialState());
+  static TodoCubit get(context)=>BlocProvider.of(context);
   int currentIndex=0;
   List<Widget>page=[
-    new_task_page(),
-    done_task_page(),
-    archive_task_page(),
+    const NewTaskPage(),
+    const DoneTaskPage(),
+    const ArchiveTaskPage(),
   ];
   List<String>app_bar_page=[
     'New Task',
@@ -23,7 +23,7 @@ class todoCubit extends Cubit<todoStates>{
   ];
   void ChangeNav(index){
     currentIndex=index;
-    emit(todoChangeBottomNavBar());
+    emit(TodoChangeBottomNavBar());
   }
 
   Database? database;
@@ -33,19 +33,16 @@ class todoCubit extends Cubit<todoStates>{
   void createDatabase(){
      openDatabase('Todo db', version: 1,
         onCreate: (Database database, int version) async {
-          print('DataBase Created');
           await database.execute(
               'CREATE TABLE Test (id INTEGER PRIMARY KEY,tittle TEXT ,time TEXT, date TEXT, status TEXT)').then((value) {
-            print('Table Created');
           });
         },
         onOpen: (database){
           getDataFromDatabase(database);
-          print('DataBase Opened');
         }
     ).then((value) {
       database=value;
-      emit(todoCreateDataBase());
+      emit(TodoCreateDataBase());
      });
   }
 
@@ -57,11 +54,9 @@ insertIntoDatabase({
    await database?.transaction((txn) async {
       txn.rawInsert(
           'INSERT INTO Test(tittle,time, date, status) VALUES("$tittle", "$time","$date","New" )').then((value) {
-        print ('$value Successful record');
-        emit(todoInsertToDataBase());
+        emit(TodoInsertToDataBase());
         getDataFromDatabase(database);
           }).catchError((error){
-        print(error.toString());
       });
     });
   }
@@ -70,7 +65,7 @@ insertIntoDatabase({
     newTasks=[];
     doneTasks=[];
     archiveTasks=[];
-    emit(todoDataBaseLoadingState());
+    emit(TodoDataBaseLoadingState());
    database!.rawQuery('SELECT * FROM Test').then((value) {
 
      value.forEach((element){
@@ -80,7 +75,7 @@ insertIntoDatabase({
          doneTasks.add(element);
        else archiveTasks.add(element);
      });
-     emit(todoGetDataBase());
+     emit(TodoGetDataBase());
    });
   }
 
@@ -92,7 +87,7 @@ insertIntoDatabase({
         'UPDATE Test SET status = ? WHERE id = ?',
         [status, id]).then((value) {
           getDataFromDatabase(database);
-          emit(todoDataBaseLoadingState());
+          emit(TodoDataBaseLoadingState());
   });
 
   }
@@ -101,19 +96,19 @@ insertIntoDatabase({
   }) async{
     await database!.rawDelete('DELETE FROM Test WHERE id = ?', [id]).then((value) {
       getDataFromDatabase(database);
-      emit(todoDeleteDataBase());
+      emit(TodoDeleteDataBase());
     });
   }
 
   IconData fabIcon = Icons.edit;
   bool isBottomSheetShown = false;
   void changeIconBottom({
-    required IconData? Icon,
+    required IconData? icon,
     required bool? isShown,
 }){
     isBottomSheetShown=isShown!;
-    fabIcon=Icon!;
-    emit(todoChangeIconBottomNavBar());
+    fabIcon=icon!;
+    emit(TodoChangeIconBottomNavBar());
 
   }
 

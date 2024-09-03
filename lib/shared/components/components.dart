@@ -1,45 +1,44 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-
 import '../../todo_app_layout/todo_app/todo_cubit.dart';
 
 
 Widget defaultButton({
-  double conthight=70,
+  double containerHeight=70,
   double width=double.infinity,
   double radius=5,
   Color color=Colors.blue,
   required String text,
-  required Function,
+  required function,
   bool isUpperCase=true,
 })=>Container(
-  height: conthight,
+  height: containerHeight,
   width: width,
-  child:
-  MaterialButton(
-    onPressed: Function,
-    child: Text(isUpperCase?text.toUpperCase():text,style: TextStyle(color: Colors.white),),
-  ),
   decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(radius),
       color: color
+  ),
+  child:
+  MaterialButton(
+    onPressed: function,
+    child: Text(isUpperCase?text.toUpperCase():text,style: const TextStyle(color: Colors.white),),
   ),
 );
 
 Widget defaultTextFormField({
   required TextEditingController? controller,
-  required TextInputType? KeyboardType,
+  required TextInputType? keyboardType,
   Function(String)? onChanged,
   Function(String)? onSubmit,
   VoidCallback?onTap,
   required String? Function(String?)? validate,
-  required String? lable,
+  required String? label,
   required IconData? prefix,
   bool isPassword = false,
   IconData? suffix,
   Function()? suffixpressed,
 })=>TextFormField(
   controller: controller,
-  keyboardType: KeyboardType,
+  keyboardType: keyboardType,
   obscureText: isPassword,
   onChanged:onChanged,
   onFieldSubmitted:onSubmit,
@@ -47,8 +46,8 @@ Widget defaultTextFormField({
   validator: validate,
   decoration: InputDecoration(
     prefixIcon: Icon(prefix),
-    labelText: lable,
-    border: OutlineInputBorder(),
+    labelText: label,
+    border: const OutlineInputBorder(),
     suffixIcon: suffix !=null?IconButton(icon: Icon(suffix),onPressed: suffixpressed,):null,
 
   ),
@@ -57,7 +56,7 @@ Widget defaultTextFormField({
 Widget defaultTasks(Map model,context)=>Dismissible(
   key: Key(model['id'].toString()),
   onDismissed: (direction){
-    todoCubit.get(context).deleteFromDatabase(id: model['id']);
+    TodoCubit.get(context).deleteFromDatabase(id: model['id']);
   },
   child: Padding(
     padding: const EdgeInsets.all(10.0),
@@ -68,25 +67,25 @@ Widget defaultTasks(Map model,context)=>Dismissible(
           radius: 40,
           child: Text('${model['time']}'),
         ),
-        SizedBox(width: 20,),
+        const SizedBox(width: 20,),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${model['tittle']}',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+              Text('${model['tittle']}',style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
               Text('${model['date']}',style: TextStyle(color: Colors.grey[500],fontSize: 15),)
             ],
           ),
         ),
-        SizedBox(width: 20,),
+        const SizedBox(width: 20,),
         IconButton(onPressed: (){
-         todoCubit.get(context).updateDataFromDatabase(status: 'Done', id: model['id']);
-        }, icon:Icon(Icons.check_box,color: Colors.green,)),
-        SizedBox(width: 20,),
+          TodoCubit.get(context).updateDataFromDatabase(status: 'Done', id: model['id']);
+        }, icon:const Icon(Icons.check_box,color: Colors.green,)),
+        const SizedBox(width: 20,),
         IconButton(onPressed: (){
-          todoCubit.get(context).updateDataFromDatabase(status: 'Archive', id: model['id']);
-        }, icon:Icon(Icons.archive,color: Colors.black45,)),
+          TodoCubit.get(context).updateDataFromDatabase(status: 'Archive', id: model['id']);
+        }, icon:const Icon(Icons.archive,color: Colors.black45,)),
       ],
     ),
   ),
@@ -95,12 +94,12 @@ Widget defaultTasks(Map model,context)=>Dismissible(
 Widget buildTask({
   required List<Map> tasks,
 })=>ConditionalBuilder(
-    condition: tasks.length>0,
+    condition: tasks.isNotEmpty,
     builder: (context)=>ListView.separated(
         itemBuilder: (context,index)=>defaultTasks(tasks[index],context),
         separatorBuilder: (context,index)=> mySeparator()
         ,itemCount: tasks.length),
-    fallback: (context)=>Center(
+    fallback: (context)=>const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

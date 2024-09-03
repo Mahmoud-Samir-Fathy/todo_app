@@ -8,19 +8,15 @@ import 'package:todo_application/todo_app_layout/todo_app/todo_app_layout.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
-  // await Firebase.initializeApp();
-
-  runApp(Myapp(
-  ));
+  runApp(const Myapp());
 }
 class Myapp extends StatelessWidget{
-
-  Myapp();
+  const Myapp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
                debugShowCheckedModeBanner: false,
-              home:todo_app_layout()
+              home:TodoAppLayout()
           );
         }
 
